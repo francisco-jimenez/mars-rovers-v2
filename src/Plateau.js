@@ -1,10 +1,10 @@
 import React from 'react'
 import NumericInput from 'react-numeric-input';
 
-export default class Rover1 extends React.Component {
-	constructor(){
+export default class Plateau extends React.Component {
+	constructor(props){
 		super()
-    this.plateau = {axisNS : 0 , axisEW : 0};
+    this.plateau = props.plateau;
 	}
 
 	handleNSChange (number){

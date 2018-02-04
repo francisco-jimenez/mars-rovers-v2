@@ -4,10 +4,7 @@ import NumericInput from 'react-numeric-input';
 export default class Rover extends React.Component {
 	constructor(props){
 		super()
-    this.rover = {
-      deploy : {coordNS : 0 , coordEW : 0},
-      move : ''
-    };
+    this.rover = props.rover;
     this.whatRover = props.whatRover;
 	}
 
