@@ -20,6 +20,11 @@ export default class Rover extends React.Component {
     this.rover.move = event.target.value;
     this.props.getRover(this.rover, this.whatRover);
   }
+  handleOrientationChange (event){
+    this.rover.orientation = event.target.value;
+    this.props.getRover(this.rover, this.whatRover);
+  }
+
 
 	render(){
 		return (
@@ -38,6 +43,12 @@ export default class Rover extends React.Component {
               onChange={this.handleEWChange.bind(this)}
               value= {this.rover.deploy.coordEW}
           />
+          <br/>
+          Orientation: <input type = "text"
+                        onChange = {this.handleOrientationChange.bind(this)}
+                        value= {this.rover.orientation}
+                        maxlength="1"
+                        />
           <br/>
           Move: <input type = "text" onChange = {this.handleMoveChange.bind(this)} />
       </div>
