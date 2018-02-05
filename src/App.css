@@ -26,3 +26,8 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+body {
+   background-image: url("http://res.cloudinary.com/ditmua47w/image/upload/v1517827013/rover.jpg");
+   background-repeat: no-repeat;
+   background-size: cover
+}
