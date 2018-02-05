@@ -80,8 +80,8 @@ doMove (rover) {
     if(oneMove === 'M' || oneMove === 'm'){
       if(rover.final.orientation === 'N' || rover.final.orientation === 'n') rover.final.coordNS = rover.final.coordNS+1;
       else if(rover.final.orientation === 'S' || rover.final.orientation === 's') rover.final.coordNS = rover.final.coordNS-1;
-      else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.coordEW = rover.final.coordEW+1;
-      else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.coordEW = rover.final.coordEW-1;
+      else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.coordEW = rover.final.coordEW-1;
+      else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.coordEW = rover.final.coordEW+1;
     }
   }
 }
