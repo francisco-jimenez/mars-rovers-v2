@@ -47,7 +47,7 @@ export default class Rover extends React.Component {
           Orientation: <input type = "text"
                         onChange = {this.handleOrientationChange.bind(this)}
                         value= {this.rover.orientation}
-                        maxlength="1"
+                        maxLength="1"
                         />
           <br/>
           Move: <input type = "text" onChange = {this.handleMoveChange.bind(this)} />

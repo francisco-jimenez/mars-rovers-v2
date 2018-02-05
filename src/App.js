@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Plateau from './Plateau';
 import Rover from './Rover';
+import ErrorList from './ErrorList';
+import FinalInfo from './FinalInfo';
 
 export default class App extends React.Component {
 
@@ -119,12 +121,11 @@ checkErrorsAndSubmit(event){
           errorList.push(`Rover 2 finishes out of bounds`);
         }
       } else {
-        if(plateau.axisNS < rover1.coordNS || plateau.axisEW < rover1.coordEW) {
+        if(plateau.axisNS < rover1.deploy.coordNS || plateau.axisEW < rover1.deploy.coordEW) {
               errorList.push(`Rover 1 is deployed out of bounds`);
         }
-        if(plateau.axisNS < rover2.coordNS || plateau.axisEW < rover2.coordEW) {
+        if(plateau.axisNS < rover2.deploy.coordNS || plateau.axisEW < rover2.deploy.coordEW) {
           errorList.push(`Rover 2 is deployed out of bounds`);
-          errorList.push(`Rover 2 is out of bounds`);
         }
       }
     }
@@ -193,21 +194,21 @@ render(){
           <Rover getRover = {this.getRover} rover= {this.state.rover2} whatRover= {2}></Rover>
           <br/>
           <button onClick= {this.checkErrorsAndSubmit.bind(this)}>Go!</button>
+          <ErrorList errorList = {this.state.errorList}/>
+          <FinalInfo errorList = {this.state.errorList} rover1 = {this.state.rover1} rover2 = {this.state.rover2}/>
         </form>
-      <br/>
-      <br/>
-        Plateau dim:  {this.state.plateau.axisNS}  {this.state.plateau.axisEW}
-      <br/>
-        Rover1: {JSON.stringify(this.state.rover1)}
-        <br/>
-        Rover2: {JSON.stringify(this.state.rover2)}
-        <br/>
-        Errors: {JSON.stringify(this.state.errorList)}
     </div>
     )
   }
 
 }
-
-//<Input getData = {this.getData}/>
-//<h1>my data is {this.state.data}</h1>
+/**
+  <br/>
+  Plateau {this.state.plateau.axisNS} X {this.state.plateau.axisEW}
+  <br/>
+    Rover1: {JSON.stringify(this.state.rover1)}
+  <br/>
+    Rover2: {JSON.stringify(this.state.rover2)}
+  <br/>
+    Errors: {JSON.stringify(this.state.errorList)}
+**/
