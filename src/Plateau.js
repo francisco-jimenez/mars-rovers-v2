@@ -20,19 +20,19 @@ export default class Plateau extends React.Component {
 		return (
       <div>
           <h3>PLATEAU</h3>
-          N-S Axis:
-          <NumericInput
-              min = {0}
-              onChange={this.handleNSChange.bind(this)}
-              value= {this.plateau.axisNS}
-          />
+					E-W Axis:
+					<NumericInput
+						min = {0}
+						onChange={this.handleEWChange.bind(this)}
+						value= {this.plateau.axisEW}
+					/>
           <br/>
-          E-W Axis:
-          <NumericInput
-              min = {0}
-              onChange={this.handleEWChange.bind(this)}
-              value= {this.plateau.axisEW}
-          />
+					N-S Axis:
+					<NumericInput
+						min = {0}
+						onChange={this.handleNSChange.bind(this)}
+						value= {this.plateau.axisNS}
+						/>
       </div>
 
 			)

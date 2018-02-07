@@ -30,18 +30,18 @@ export default class Rover extends React.Component {
 		return (
       <div>
           <h3>ROVER {this.whatRover}</h3>
+					E-W Deploy:
+					<NumericInput
+						min = {0}
+						onChange={this.handleEWChange.bind(this)}
+						value= {this.rover.deploy.coordEW}
+					/>
+				 <br/>
           N-S Deploy:
           <NumericInput
               min = {0}
               onChange={this.handleNSChange.bind(this)}
               value= {this.rover.deploy.coordNS}
-          />
-          <br/>
-          E-W Deploy:
-          <NumericInput
-              min = {0}
-              onChange={this.handleEWChange.bind(this)}
-              value= {this.rover.deploy.coordEW}
           />
           <br/>
           Orientation: <input type = "text"

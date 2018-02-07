@@ -18,7 +18,7 @@ export default class FileInput extends React.Component {
                 var obj = {};
                 try {
                   obj = JSON.parse(text);
-                  that.props.getScenarioFromTextInput(JSON.parse(text))
+                  that.props.getScenarioFromTextInput(obj)
                 } catch (e) {
                   alert('archivo no valido'); // You get an error.
                   console.log(e.message)

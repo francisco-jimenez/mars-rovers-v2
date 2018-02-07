@@ -83,17 +83,27 @@ checkTest(scenario){
   this.checkErrorsAndMoveRovers();
 
   if(this.state.errorList.length>0){
-    console.log(this.state.errorList);
+        console.log(this.state.errorList);
   } else{
     if(this.state.rover1.final.coordEW == this.state.rover1.expected.coordEW &&
         this.state.rover1.final.coordNS == this.state.rover1.expected.coordNS &&
         this.state.rover1.final.orientation == this.state.rover1.expected.orientation) {
-          console.log('TEST PASSED OK!!')
+          console.log('TEST OK!!')
+        } else{
+          console.log('TEST FAILED')
         }
   }
-  console.log('Plateau' , this.state.plateau.axisNS , 'X' , this.state.plateau.axisEW)
-  console.log('Rover1:' , JSON.stringify(this.state.rover1))
-  console.log('Rover2:' , JSON.stringify(this.state.rover2))
+      console.log('Plateau' , this.state.plateau.axisNS , 'X' , this.state.plateau.axisEW)
+      console.log('Rover1:')
+      console.log('Final position:')
+      console.log(`${this.state.rover1.final.coordEW} , ${this.state.rover1.final.coordNS}  ${this.state.rover1.final.orientation}`)
+      console.log('Expected:')
+      console.log(`${this.state.rover1.expected.coordEW} , ${this.state.rover1.expected.coordNS}  ${this.state.rover1.expected.orientation}`)
+      console.log('Rover2:')
+      console.log('Final position:')
+      console.log(`${this.state.rover2.final.coordEW} , ${this.state.rover2.final.coordNS}  ${this.state.rover2.final.orientation}`)
+      console.log('Expected:')
+      console.log(`${this.state.rover2.expected.coordEW} , ${this.state.rover2.expected.coordNS}  ${this.state.rover2.expected.orientation}`)
 
 }
 
