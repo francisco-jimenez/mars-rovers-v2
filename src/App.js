@@ -62,15 +62,38 @@ getScenarioFromTextInput(JSONtestScenarios) {
     var previousPlateau = this.state.plateau;
     var previousRover1  = this.state.rover1;
     var previousRover2  = this.state.rover2;
+    var previousErrorList  = this.state.errorList;
+
     for (var scenario of JSONtestScenarios) {
-        this.state.plateau  = scenario.plateau;
-        this.state.rover1   = scenario.rover1;
-        this.state.rover2   = scenario.rover2;
+        this.checkTest(scenario);
     }
-    this.checkErrorsAndSubmit();
+
+    this.state.errorList =  previousErrorList;
     this.state.plateau = previousPlateau;
     this.state.rover1 = previousRover1;
     this.state.rover2 = previousRover2;
+}
+
+checkTest(scenario){
+  this.state.errorList = []
+  this.state.plateau  = scenario.plateau;
+  this.state.rover1   = scenario.rover1;
+  this.state.rover2   = scenario.rover2;
+
+  this.checkErrorsAndMoveRovers();
+
+  if(this.state.errorList.length>0){
+    console.log(this.state.errorList);
+  } else{
+    if(this.state.rover1.final.coordEW == this.state.rover1.expected.coordEW &&
+        this.state.rover1.final.coordNS == this.state.rover1.expected.coordNS &&
+        this.state.rover1.final.orientation == this.state.rover1.expected.orientation) {
+          console.log('TEST PASSED OK!!')
+        }
+  }
+  console.log('Plateau' , this.state.plateau.axisNS , 'X' , this.state.plateau.axisEW)
+  console.log('Rover1:' , JSON.stringify(this.state.rover1))
+  console.log('Rover2:' , JSON.stringify(this.state.rover2))
 
 }
 
@@ -96,8 +119,8 @@ doMove (rover) {
   rover.final.coordNS = rover.deploy.coordNS
   rover.final.coordEW = rover.deploy.coordEW
   rover.final.orientation = rover.orientation
-  console.log('***************')
-  console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
+  //console.log('***************')
+  //console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
   for (var x = 0; x < rover.move.length; x++)
   {
     var oneMove = rover.move.charAt(x);
@@ -119,18 +142,18 @@ doMove (rover) {
       else if(move('E','coordEW',+1));
       else if(move('W','coordEW',-1));
     }
-    console.log('MOVE --> ', oneMove, '!')
-    console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
+    //console.log('MOVE --> ', oneMove, '!')
+    //console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
   }
 }
 handleSubmitEvent(event) {
   event.preventDefault();
-  var state = this.checkErrorsAndSubmit();
+  var state = this.checkErrorsAndMoveRovers();
   if(state){
     this.submit(state);
   }
 }
-checkErrorsAndSubmit(){
+checkErrorsAndMoveRovers(){
     var errorList = [];
 
     var checkMoveFormat = (moveText, whatRover,errorList) => {
