@@ -75,6 +75,24 @@ getScenarioFromTextInput(JSONtestScenarios) {
 }
 
 doMove (rover) {
+
+  function changeOrientation(orientationToMatch , newOrientation){
+      if(rover.final.orientation.toUpperCase() === orientationToMatch.toUpperCase()) {
+          rover.final.orientation = newOrientation;
+          return true;
+        }
+        return false;
+  }
+
+  function move(orientation , coord, amount){
+      if(rover.final.orientation.toUpperCase() === orientation.toUpperCase()) {
+          rover.final[coord] = rover.final[coord] + amount;
+          return true;
+        }
+        return false;
+  }
+
+
   rover.final.coordNS = rover.deploy.coordNS
   rover.final.coordEW = rover.deploy.coordEW
   rover.final.orientation = rover.orientation
@@ -84,22 +102,22 @@ doMove (rover) {
   {
     var oneMove = rover.move.charAt(x);
     if(oneMove === 'L' || oneMove === 'l'){
-      if(rover.final.orientation === 'N' || rover.final.orientation === 'n') rover.final.orientation = 'E';
-      else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.orientation = 'S';
-      else if(rover.final.orientation === 'S' || rover.final.orientation === 's') rover.final.orientation = 'W';
-      else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.orientation = 'N';
+      if(changeOrientation('N' , 'W'));
+      else if(changeOrientation('W' , 'S'));
+      else if(changeOrientation('S' , 'E'));
+      else if(changeOrientation('E' , 'N'));
     }
     if(oneMove === 'R' || oneMove === 'r'){
-      if(rover.final.orientation === 'N' || rover.final.orientation === 'n') rover.final.orientation = 'E';
-      else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.orientation = 'N';
-      else if(rover.final.orientation === 'S' || rover.final.orientation === 's') rover.final.orientation = 'W';
-      else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.orientation = 'S';
+      if(changeOrientation('N' , 'E'));
+      else if(changeOrientation('E' , 'S'));
+      else if(changeOrientation('S' , 'W'));
+      else if(changeOrientation('W' , 'N'));
     }
     if(oneMove === 'M' || oneMove === 'm'){
-      if(rover.final.orientation === 'N' || rover.final.orientation === 'n') rover.final.coordNS = rover.final.coordNS+1;
-      else if(rover.final.orientation === 'S' || rover.final.orientation === 's') rover.final.coordNS = rover.final.coordNS-1;
-      else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.coordEW = rover.final.coordEW-1;
-      else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.coordEW = rover.final.coordEW+1;
+      if(move('N','coordNS',+1));
+      else if(move('S','coordNS',-1));
+      else if(move('E','coordEW',+1));
+      else if(move('W','coordEW',-1));
     }
     console.log('MOVE --> ', oneMove, '!')
     console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
@@ -107,7 +125,10 @@ doMove (rover) {
 }
 handleSubmitEvent(event) {
   event.preventDefault();
-  this.checkErrorsAndSubmit();
+  var state = this.checkErrorsAndSubmit();
+  if(state){
+    this.submit(state);
+  }
 }
 checkErrorsAndSubmit(){
     var errorList = [];
@@ -173,7 +194,7 @@ checkErrorsAndSubmit(){
     checkEmptyValue(this.state.rover2.move, 'in rover2 "Move"',errorList);
     checkEmptyValue(this.state.rover2.orientation, 'in rover2 "Orientation"',errorList);
 
-    if(setErrors(errorList)) return;
+    if(setErrors(errorList)) return false;
 
     checkMoveFormat(this.state.rover1.move, '1', errorList);
     checkMoveFormat(this.state.rover2.move, '2', errorList);
@@ -181,11 +202,12 @@ checkErrorsAndSubmit(){
     checkOrientationFormat(this.state.rover1.orientation, '1', errorList);
     checkOrientationFormat(this.state.rover2.orientation, '2', errorList);
 
-    if(setErrors(errorList)) return;
+    if(setErrors(errorList)) return false;
 
     checkPositionInbounds(this.state.plateau, this.state.rover1, this.state.rover2, errorList, false);
 
-    if(setErrors(errorList)) return;
+    if(setErrors(errorList)) return false;
+
     var auxRover1 = this.state.rover1;
     this.doMove(auxRover1);
     var auxRover2 = this.state.rover2
@@ -193,16 +215,18 @@ checkErrorsAndSubmit(){
 
     checkPositionInbounds(this.state.plateau, auxRover1, auxRover2, errorList, true);
 
-    if(setErrors(errorList)) return;
+    if(setErrors(errorList)) return false;
 
-    this.setState({
+    return {
               rover1   :auxRover1,
               rover2   :auxRover2,
               errorList:errorList
-            })
+            }
 
+}
 
-    console.log(JSON.stringify(errorList));
+submit(state){
+  this.setState(state)
 }
 
 
