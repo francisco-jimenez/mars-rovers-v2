@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import Plateau from './Plateau';
 import Rover from './Rover';
 import ErrorList from './ErrorList';
 import FinalInfo from './FinalInfo';
+import FileInput from './FileInput'
 
 export default class App extends React.Component {
 
 constructor(){
   super()
-
+  var testScenarios = [];
   function rover() {
       this.deploy =
               {
@@ -33,7 +34,6 @@ constructor(){
       axisNS : 0,
       axisEW : 0
   }
-
   this.state = {
                 plateau: plateau,
                 rover1:rover1,
@@ -43,6 +43,7 @@ constructor(){
 
   this.getPlateau = this.getPlateau.bind(this)
   this.getRover = this.getRover.bind(this)
+  this.getScenarioFromTextInput = this.getScenarioFromTextInput.bind(this)
 }
 
 getPlateau(newPlateau){
@@ -57,11 +58,28 @@ getRover(newRover, whatRover){
   }
 }
 
+getScenarioFromTextInput(JSONtestScenarios) {
+    var previousPlateau = this.state.plateau;
+    var previousRover1  = this.state.rover1;
+    var previousRover2  = this.state.rover2;
+    for (var scenario of JSONtestScenarios) {
+        this.state.plateau  = scenario.plateau;
+        this.state.rover1   = scenario.rover1;
+        this.state.rover2   = scenario.rover2;
+    }
+    this.checkErrorsAndSubmit();
+    this.state.plateau = previousPlateau;
+    this.state.rover1 = previousRover1;
+    this.state.rover2 = previousRover2;
+
+}
+
 doMove (rover) {
   rover.final.coordNS = rover.deploy.coordNS
   rover.final.coordEW = rover.deploy.coordEW
   rover.final.orientation = rover.orientation
-
+  console.log('***************')
+  console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
   for (var x = 0; x < rover.move.length; x++)
   {
     var oneMove = rover.move.charAt(x);
@@ -72,10 +90,10 @@ doMove (rover) {
       else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.orientation = 'N';
     }
     if(oneMove === 'R' || oneMove === 'r'){
-      if(rover.final.orientation === 'N' || rover.final.orientation === 'n') rover.final.orientation = 'W';
-      else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.orientation = 'S';
-      else if(rover.final.orientation === 'S' || rover.final.orientation === 's') rover.final.orientation = 'E';
-      else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.orientation = 'N';
+      if(rover.final.orientation === 'N' || rover.final.orientation === 'n') rover.final.orientation = 'E';
+      else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.orientation = 'N';
+      else if(rover.final.orientation === 'S' || rover.final.orientation === 's') rover.final.orientation = 'W';
+      else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.orientation = 'S';
     }
     if(oneMove === 'M' || oneMove === 'm'){
       if(rover.final.orientation === 'N' || rover.final.orientation === 'n') rover.final.coordNS = rover.final.coordNS+1;
@@ -83,11 +101,15 @@ doMove (rover) {
       else if(rover.final.orientation === 'W' || rover.final.orientation === 'w') rover.final.coordEW = rover.final.coordEW-1;
       else if(rover.final.orientation === 'E' || rover.final.orientation === 'e') rover.final.coordEW = rover.final.coordEW+1;
     }
+    console.log('MOVE --> ', oneMove, '!')
+    console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
   }
 }
-
-checkErrorsAndSubmit(event){
-    event.preventDefault();
+handleSubmitEvent(event) {
+  event.preventDefault();
+  this.checkErrorsAndSubmit();
+}
+checkErrorsAndSubmit(){
     var errorList = [];
 
     var checkMoveFormat = (moveText, whatRover,errorList) => {
@@ -189,11 +211,13 @@ render(){
     return (
       <div>
         <form>
+          <FileInput getScenarioFromTextInput = {this.getScenarioFromTextInput}></FileInput>
+          <h3>..or build your own scenario</h3>
           <Plateau getPlateau = {this.getPlateau} plateau = {this.state.plateau}></Plateau>
           <Rover getRover = {this.getRover} rover= {this.state.rover1} whatRover= {1}></Rover>
           <Rover getRover = {this.getRover} rover= {this.state.rover2} whatRover= {2}></Rover>
           <br/>
-          <button onClick= {this.checkErrorsAndSubmit.bind(this)}>Go!</button>
+          <button onClick= {this.handleSubmitEvent.bind(this)}>Go!</button>
           <ErrorList errorList = {this.state.errorList}/>
           <FinalInfo errorList = {this.state.errorList} rover1 = {this.state.rover1} rover2 = {this.state.rover2}/>
         </form>
