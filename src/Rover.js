@@ -50,7 +50,10 @@ export default class Rover extends React.Component {
                         maxLength="1"
                         />
           <br/>
-          Move: <input type = "text" onChange = {this.handleMoveChange.bind(this)} />
+          Move: <input type = "text"
+					 				className = 'smallInput'
+									onChange = {this.handleMoveChange.bind(this)}
+								/>
       </div>
 
 			)

@@ -30,8 +30,10 @@ export default class FileInput extends React.Component {
 
     render() {
       return <span>
-        <h3>Select test to run.</h3>
+        <label for="fileuploader">JSON file to test  </label>
         <input type="file"
+        className = "testInput"
+        id = "fileUploader"
         name="myFile"
         onChange={this.uploadFile.bind(this)} />
       </span>

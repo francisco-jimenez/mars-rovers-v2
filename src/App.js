@@ -104,7 +104,7 @@ checkTest(scenario){
       console.log(`${this.state.rover2.final.coordEW} , ${this.state.rover2.final.coordNS}  ${this.state.rover2.final.orientation}`)
       console.log('Expected:')
       console.log(`${this.state.rover2.expected.coordEW} , ${this.state.rover2.expected.coordNS}  ${this.state.rover2.expected.orientation}`)
-
+      alert('Test finished, check console for results')
 }
 
 doMove (rover) {
@@ -268,11 +268,18 @@ render(){
     return (
       <div>
         <form>
-          <FileInput getScenarioFromTextInput = {this.getScenarioFromTextInput}></FileInput>
-          <h3>..or build your own scenario</h3>
+          <h2>Select test to run..</h2>
+          <FileInput getScenarioFromTextInput = {this.getScenarioFromTextInput}>Upload test file</FileInput>
+          <h2>..or build your own scenario</h2>
           <Plateau getPlateau = {this.getPlateau} plateau = {this.state.plateau}></Plateau>
-          <Rover getRover = {this.getRover} rover= {this.state.rover1} whatRover= {1}></Rover>
-          <Rover getRover = {this.getRover} rover= {this.state.rover2} whatRover= {2}></Rover>
+          <div className="rovers">
+            <div>
+              <Rover getRover = {this.getRover} rover= {this.state.rover1} whatRover= {1}></Rover>
+            </div>
+            <div>
+              <Rover getRover = {this.getRover} rover= {this.state.rover2} whatRover= {2}></Rover>
+            </div>
+          </div>
           <br/>
           <button onClick= {this.handleSubmitEvent.bind(this)}>Go!</button>
           <ErrorList errorList = {this.state.errorList}/>
