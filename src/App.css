@@ -11,7 +11,7 @@ body {
 }
 button{
   padding:1rem;
-  width: 30%;
+  width: 25%;
   font-size: 14;
   font-weight: bold;
 }
@@ -23,6 +23,10 @@ button:hover{
     height: 36px;
     line-height: 36px;
     margin:5px;
+}
+
+.testInput{
+    //width: 100%;
 }
 
 .rovers {
@@ -42,7 +46,6 @@ button:hover{
 
 .roverLabels{
   display: grid;
-  vertical-align: middle;
 	grid-template-rows : 1fr 1fr 1fr 1fr;
   justify-content: flex-end;
 }

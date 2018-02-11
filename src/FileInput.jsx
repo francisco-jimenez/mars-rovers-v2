@@ -20,7 +20,7 @@ export default class FileInput extends React.Component {
                   obj = JSON.parse(text);
                   that.props.getScenarioFromTextInput(obj)
                 } catch (e) {
-                  alert('archivo no valido'); // You get an error.
+                  alert('Not supported file'); // You get an error.
                   console.log(e.message)
                 }
             };
@@ -30,7 +30,7 @@ export default class FileInput extends React.Component {
 
     render() {
       return <span>
-        <label for="fileuploader">JSON file to test  </label>
+        <label for="fileuploader" className = "label">JSON file to test  </label>
         <input type="file"
         className = "testInput"
         id = "fileUploader"
