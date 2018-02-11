@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "codeclimate-test-reporter": "^0.5.0",
+    "normalize.css": "^8.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-numeric-input": "^2.2.3",

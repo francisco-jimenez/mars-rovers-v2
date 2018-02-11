@@ -267,25 +267,32 @@ submit(state){
 render(){
     return (
       <div>
-        <form>
-          <h2>Select test to run..</h2>
-          <FileInput getScenarioFromTextInput = {this.getScenarioFromTextInput}>Upload test file</FileInput>
-          <h2>..or build your own scenario</h2>
-          <Plateau getPlateau = {this.getPlateau} plateau = {this.state.plateau}></Plateau>
-          <div className="rovers">
-            <div>
-              <Rover getRover = {this.getRover} rover= {this.state.rover1} whatRover= {1}></Rover>
-            </div>
-            <div>
-              <Rover getRover = {this.getRover} rover= {this.state.rover2} whatRover= {2}></Rover>
-            </div>
+          <div>
+              <h2>Select test to run..</h2>
+              <FileInput getScenarioFromTextInput = {this.getScenarioFromTextInput}>Upload test file</FileInput>
+              <h2>..or build your own scenario</h2>
           </div>
-          <br/>
-          <button onClick= {this.handleSubmitEvent.bind(this)}>Go!</button>
-          <ErrorList errorList = {this.state.errorList}/>
-          <FinalInfo errorList = {this.state.errorList} rover1 = {this.state.rover1} rover2 = {this.state.rover2}/>
-        </form>
-    </div>
+          <div>
+              <Plateau getPlateau = {this.getPlateau} plateau = {this.state.plateau}></Plateau>
+          </div>
+          <div className="rovers">
+              <div className= "leftRover">
+                  <Rover getRover = {this.getRover} rover= {this.state.rover1} whatRover= {1}></Rover>
+              </div>
+              <div className= "rigthRover">
+                  <Rover getRover = {this.getRover} rover= {this.state.rover2} whatRover= {2}></Rover>
+              </div>
+          </div>
+          <div>
+              <button clasName = "OKButton" onClick= {this.handleSubmitEvent.bind(this)}>Go!</button>
+          </div>
+          <div className="errorList">
+              <ErrorList errorList = {this.state.errorList}/>
+          </div>
+          <div>
+              <FinalInfo errorList = {this.state.errorList} rover1 = {this.state.rover1} rover2 = {this.state.rover2}/>
+          </div>
+      </div>
     )
   }
 

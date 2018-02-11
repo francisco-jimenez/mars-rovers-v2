@@ -2,9 +2,12 @@ body {
   text-align: center;
   font-family: 'Orbitron', sans-serif;
 }
-input{
-  height:30px;
-  width: 90px;
+.input{
+  border-width: 2px;
+  width: 120px;
+  height: 36px;
+  margin: 2px;
+  line-height: 36px;
 }
 button{
   padding:1rem;
@@ -16,10 +19,75 @@ button:hover{
   background: gray;
 }
 
+.label{
+    height: 36px;
+    line-height: 36px;
+    margin:5px;
+}
+
 .rovers {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+  margin: 5px;
 }
+
+.leftRover {
+  display: grid;
+	justify-content: flex-end;
+}
+.rigthRover{
+  display: grid;
+  justify-content: flex-start;
+}
+
+.roverLabels{
+  display: grid;
+  vertical-align: middle;
+	grid-template-rows : 1fr 1fr 1fr 1fr;
+  justify-content: flex-end;
+}
+.roverInputs{
+  display:grid ;
+  grid-template-rows : 1fr 1fr 1fr 1fr;
+  justify-content: flex-start;
+}
+
+.okButton{
+  display: grid;
+}
+
+.plateau {
+	display: grid;
+	grid-template-columns:  1fr 1fr;
+}
+
+.orientationInput {
+  display: grid;
+  justify-content: flex-start;
+  width: 30px;
+}
+
+.errorList{
+  margin-top: 10px;
+  color: red;
+}
+
+
+.plateauLabels{
+  height: 36px;
+  line-height: 36px;
+  display: grid;
+	grid-template-rows : 1fr 1fr;
+  justify-content: flex-end;
+}
+
+.plateauInputs{
+  display:grid ;
+  grid-template-rows : 1fr 1fr;
+  justify-content: flex-start;
+}
+
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
@@ -36,9 +104,6 @@ button:hover{
   font-size: 1.5em;
 }
 
-.testInput {
-    width: 200px;
-}
 
 .App-intro {
   font-size: large;

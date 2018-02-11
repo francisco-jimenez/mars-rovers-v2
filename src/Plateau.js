@@ -18,22 +18,36 @@ export default class Plateau extends React.Component {
 
 	render(){
 		return (
-      <div>
-          <h3>PLATEAU</h3>
-					E-W Axis:
-					<NumericInput
-						min = {0}
-						onChange={this.handleEWChange.bind(this)}
-						value= {this.plateau.axisEW}
-					/>
-          <br/>
-					N-S Axis:
-					<NumericInput
-						min = {0}
-						onChange={this.handleNSChange.bind(this)}
-						value= {this.plateau.axisNS}
-						/>
-      </div>
+		<div>
+			<h3>PLATEAU</h3>
+			<div className ='plateau'>
+					<div className ='plateauLabels'>
+							<div clasName ="label">
+								E-W Axis:
+							</div>
+							<div className = "label">
+								N-S Axis:
+							</div>
+					</div>
+		      <div className = 'plateauInputs'>
+							<div>
+								<NumericInput
+									className = "input"
+									min = {0}
+									onChange={this.handleEWChange.bind(this)}
+									value= {this.plateau.axisEW}/>
+							</div>
+							<div>
+								<NumericInput
+									className = "input"
+									min = {0}
+									onChange={this.handleNSChange.bind(this)}
+									value= {this.plateau.axisNS}
+									/>
+							</div>
+		      </div>
+		</div>
+	</div>
 
 			)
 	}

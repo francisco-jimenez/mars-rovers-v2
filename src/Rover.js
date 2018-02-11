@@ -28,34 +28,56 @@ export default class Rover extends React.Component {
 
 	render(){
 		return (
-      <div>
-          <h3>ROVER {this.whatRover}</h3>
-					E-W Deploy:
-					<NumericInput
-						min = {0}
-						onChange={this.handleEWChange.bind(this)}
-						value= {this.rover.deploy.coordEW}
-					/>
-				 <br/>
-          N-S Deploy:
-          <NumericInput
-              min = {0}
-              onChange={this.handleNSChange.bind(this)}
-              value= {this.rover.deploy.coordNS}
-          />
-          <br/>
-          Orientation: <input type = "text"
-                        onChange = {this.handleOrientationChange.bind(this)}
-                        value= {this.rover.orientation}
-                        maxLength="1"
-                        />
-          <br/>
-          Move: <input type = "text"
-					 				className = 'smallInput'
-									onChange = {this.handleMoveChange.bind(this)}
+		<div>
+					<h3>ROVER {this.whatRover}</h3>
+			<div className = "rovers">
+					<div className = "roverLabels">
+						<div className = "label">
+								E-W:
+						</div>
+						<div className = "label">
+								 N-S:
+						</div>
+						<div className = "label">
+								Orientation:
+						</div>
+						<div className = "label">
+								 Move:
+						</div>
+					</div>
+	      <div className = "roverInputs">
+						<div>
+							<NumericInput
+								className = "input"
+								min = {0}
+								onChange={this.handleEWChange.bind(this)}
+								value= {this.rover.deploy.coordEW}
 								/>
-      </div>
-
+						</div>
+						<div>
+								<NumericInput
+									className = "input"
+									min = {0}
+									onChange={this.handleNSChange.bind(this)}
+									value= {this.rover.deploy.coordNS}
+									/>
+						</div>
+						<div>
+								<input className= " input orientationInput" type = "text"
+									onChange = {this.handleOrientationChange.bind(this)}
+									value= {this.rover.orientation}
+									maxLength="1"
+									/>
+						</div>
+						<div>
+									<input type = "text"
+										className = "input"
+										onChange = {this.handleMoveChange.bind(this)}
+										/>
+						</div>
+		      </div>
+			</div>
+		</div>
 			)
 	}
 }
