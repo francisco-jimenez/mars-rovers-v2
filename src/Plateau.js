@@ -22,7 +22,7 @@ export default class Plateau extends React.Component {
 			<h3>PLATEAU</h3>
 			<div className ='plateau'>
 					<div className ='plateauLabels'>
-							<div clasName ="label">
+							<div className ="label">
 								E-W Axis:
 							</div>
 							<div className = "label">

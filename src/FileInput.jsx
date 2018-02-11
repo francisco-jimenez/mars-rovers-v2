@@ -30,7 +30,7 @@ export default class FileInput extends React.Component {
 
     render() {
       return <span>
-        <label for="fileuploader" className = "label">JSON file to test  </label>
+        <label className = "label">JSON file to test  </label>
         <input type="file"
         className = "testInput"
         id = "fileUploader"

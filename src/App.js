@@ -5,35 +5,18 @@ import Rover from './Rover';
 import ErrorList from './ErrorList';
 import FinalInfo from './FinalInfo';
 import FileInput from './FileInput'
+import * as Utils from './Utils.js';
 
 export default class App extends React.Component {
 
 constructor(){
   super()
-  var testScenarios = [];
-  function rover() {
-      this.deploy =
-              {
-                coordNS : 0 ,
-                coordEW : 0
-              },
-      this.final =
-              {
-                coordNS : null ,
-                coordEW : null ,
-                orientation :null
-              },
-      this.move = '',
-      this.orientation = 'N'
-  };
 
-  var rover1 = new rover();
-  var rover2 = new rover();
+  var rover1 = new Utils.rover();
+  var rover2 = new Utils.rover();
 
-  var plateau = {
-      axisNS : 0,
-      axisEW : 0
-  }
+  var plateau = new Utils.plateau();
+
   this.state = {
                 plateau: plateau,
                 rover1:rover1,
@@ -46,33 +29,8 @@ constructor(){
   this.getScenarioFromTextInput = this.getScenarioFromTextInput.bind(this)
 }
 
-getPlateau(newPlateau){
-  this.setState({ plateau : newPlateau})
-}
 
-getRover(newRover, whatRover){
-  if(whatRover == '1') {
-    this.setState({ rover1: newRover })
-  } else {
-    this.setState({ rover2: newRover })
-  }
-}
-
-getScenarioFromTextInput(JSONtestScenarios) {
-    var previousPlateau = this.state.plateau;
-    var previousRover1  = this.state.rover1;
-    var previousRover2  = this.state.rover2;
-    var previousErrorList  = this.state.errorList;
-
-    for (var scenario of JSONtestScenarios) {
-        this.checkTest(scenario);
-    }
-
-    this.state.errorList =  previousErrorList;
-    this.state.plateau = previousPlateau;
-    this.state.rover1 = previousRover1;
-    this.state.rover2 = previousRover2;
-}
+////TESTING////
 
 checkTest(scenario){
   this.state.errorList = []
@@ -93,20 +51,11 @@ checkTest(scenario){
           console.log('TEST FAILED')
         }
   }
-      console.log('Plateau' , this.state.plateau.axisNS , 'X' , this.state.plateau.axisEW)
-      console.log('Rover1:')
-      console.log('Final position:')
-      console.log(`${this.state.rover1.final.coordEW} , ${this.state.rover1.final.coordNS}  ${this.state.rover1.final.orientation}`)
-      console.log('Expected:')
-      console.log(`${this.state.rover1.expected.coordEW} , ${this.state.rover1.expected.coordNS}  ${this.state.rover1.expected.orientation}`)
-      console.log('Rover2:')
-      console.log('Final position:')
-      console.log(`${this.state.rover2.final.coordEW} , ${this.state.rover2.final.coordNS}  ${this.state.rover2.final.orientation}`)
-      console.log('Expected:')
-      console.log(`${this.state.rover2.expected.coordEW} , ${this.state.rover2.expected.coordNS}  ${this.state.rover2.expected.orientation}`)
+      Utils.logResults(this.state, true);
       alert('Test finished, check console for results')
 }
 
+///////////////////
 doMove (rover) {
 
   function changeOrientation(orientationToMatch , newOrientation){
@@ -156,55 +105,8 @@ doMove (rover) {
     //console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
   }
 }
-handleSubmitEvent(event) {
-  event.preventDefault();
-  var state = this.checkErrorsAndMoveRovers();
-  if(state){
-    this.submit(state);
-  }
-}
 checkErrorsAndMoveRovers(){
     var errorList = [];
-
-    var checkMoveFormat = (moveText, whatRover,errorList) => {
-      let invalidChars = /[^lrm]/gi
-      if(invalidChars.test(moveText)) {
-          errorList.push(`Rover ${whatRover} move can only accepts L, R and M values`)
-      }
-    }
-
-    var checkOrientationFormat = (orientationText, whatRover, errorList) => {
-      let invalidChars = /[^nwes]/gi
-      if(invalidChars.test(orientationText)) {
-          errorList.push(`Rover ${whatRover} orientation can only accepts N, W, S and E values`)
-      }
-    }
-
-    var checkEmptyValue = (value ,fieldAliasForErrorMessage, errorList) => {
-      if(value === null || value === '') {
-         errorList.push(`Field ${fieldAliasForErrorMessage} is empty`)
-      }
-    }
-
-    var checkPositionInbounds = (plateau, rover1, rover2, errorList, afterMoving) => {
-      if (afterMoving) {
-        if(plateau.axisNS < rover1.final.coordNS || plateau.axisEW < rover1.final.coordEW
-            || rover1.final.coordNS < 0          || rover1.final.coordEW < 0               ) {
-            errorList.push(`Rover 1 finishes out of bounds`);
-        }
-        if(plateau.axisNS < rover2.final.coordNS || plateau.axisEW < rover2.final.coordEW
-            || rover2.final.coordNS < 0          || rover2.final.coordEW < 0               ) {
-          errorList.push(`Rover 2 finishes out of bounds`);
-        }
-      } else {
-        if(plateau.axisNS < rover1.deploy.coordNS || plateau.axisEW < rover1.deploy.coordEW) {
-              errorList.push(`Rover 1 is deployed out of bounds`);
-        }
-        if(plateau.axisNS < rover2.deploy.coordNS || plateau.axisEW < rover2.deploy.coordEW) {
-          errorList.push(`Rover 2 is deployed out of bounds`);
-        }
-      }
-    }
     var setErrors = (errorList) => {
       if (errorList.length>0){
         this.setState({ errorList:errorList})
@@ -214,30 +116,20 @@ checkErrorsAndMoveRovers(){
       }
     }
 
-    checkEmptyValue(this.state.plateau.axisNS, 'Plateau "Axis NS"',errorList);
-    checkEmptyValue(this.state.plateau.axisEW, 'Plateau "Axis EW"',errorList);
 
-    checkEmptyValue(this.state.rover1.deploy.coordNS, 'in rover1 "Cood NS"',errorList);
-    checkEmptyValue(this.state.rover1.deploy.coordEW, 'in rover1 "Cood EW"',errorList);
-    checkEmptyValue(this.state.rover1.move, 'in rover1 "Move"',errorList);
-    checkEmptyValue(this.state.rover1.orientation, 'in rover1 "Orientation"',errorList);
-
-    checkEmptyValue(this.state.rover2.deploy.coordNS, 'in rover2 "Cood NS"',errorList);
-    checkEmptyValue(this.state.rover2.deploy.coordEW, 'in rover2 "Cood EW"',errorList);
-    checkEmptyValue(this.state.rover2.move, 'in rover2 "Move"',errorList);
-    checkEmptyValue(this.state.rover2.orientation, 'in rover2 "Orientation"',errorList);
+    Utils.checkEmptyValues(this.state, errorList);
 
     if(setErrors(errorList)) return false;
 
-    checkMoveFormat(this.state.rover1.move, '1', errorList);
-    checkMoveFormat(this.state.rover2.move, '2', errorList);
+    Utils.checkMoveFormat(this.state.rover1.move, '1', errorList);
+    Utils.checkMoveFormat(this.state.rover2.move, '2', errorList);
 
-    checkOrientationFormat(this.state.rover1.orientation, '1', errorList);
-    checkOrientationFormat(this.state.rover2.orientation, '2', errorList);
+    Utils.checkOrientationFormat(this.state.rover1.orientation, '1', errorList);
+    Utils.checkOrientationFormat(this.state.rover2.orientation, '2', errorList);
 
     if(setErrors(errorList)) return false;
 
-    checkPositionInbounds(this.state.plateau, this.state.rover1, this.state.rover2, errorList, false);
+    Utils.checkPositionInbounds(this.state.plateau, this.state.rover1, this.state.rover2, errorList, false);
 
     if(setErrors(errorList)) return false;
 
@@ -246,7 +138,7 @@ checkErrorsAndMoveRovers(){
     var auxRover2 = this.state.rover2
     this.doMove(auxRover2);
 
-    checkPositionInbounds(this.state.plateau, auxRover1, auxRover2, errorList, true);
+    Utils.checkPositionInbounds(this.state.plateau, auxRover1, auxRover2, errorList, true);
 
     if(setErrors(errorList)) return false;
 
@@ -257,12 +149,46 @@ checkErrorsAndMoveRovers(){
             }
 
 }
-
-submit(state){
-  this.setState(state)
+///////EVENT HANDLERS////////
+getPlateau(newPlateau){
+  this.setState({ plateau : newPlateau})
 }
 
+getRover(newRover, whatRover){
+  if(whatRover == '1') {
+    this.setState({ rover1: newRover })
+  } else {
+    this.setState({ rover2: newRover })
+  }
+}
 
+getScenarioFromTextInput(JSONtestScenarios) {
+
+  var previousPlateau = this.state.plateau;
+  var previousRover1  = this.state.rover1;
+  var previousRover2  = this.state.rover2;
+  var previousErrorList  = this.state.errorList;
+
+  for (var scenario of JSONtestScenarios) {
+    this.checkTest(scenario);
+  }
+
+  this.state.errorList =  previousErrorList;
+  this.state.plateau = previousPlateau;
+  this.state.rover1 = previousRover1;
+  this.state.rover2 = previousRover2;
+}
+
+handleSubmitEvent(event) {
+  event.preventDefault();
+  var newErrorFreeState = this.checkErrorsAndMoveRovers();
+  if(newErrorFreeState){
+    this.setState(newErrorFreeState)
+  }
+  Utils.logResults(this.state,false);
+}
+
+/////////////////////////////
 
 render(){
     return (
@@ -284,7 +210,7 @@ render(){
               </div>
           </div>
           <div>
-              <button clasName = "OKButton" onClick= {this.handleSubmitEvent.bind(this)}>Go!</button>
+              <button className = "OKButton" onClick= {this.handleSubmitEvent.bind(this)}>Go!</button>
           </div>
           <div className="errorList">
               <ErrorList errorList = {this.state.errorList}/>
