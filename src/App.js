@@ -33,10 +33,8 @@ constructor(){
 ////TESTING////
 
 checkTest(scenario){
+  Utils.copyStateValues(scenario, this.state);
   this.state.errorList = []
-  this.state.plateau  = scenario.plateau;
-  this.state.rover1   = scenario.rover1;
-  this.state.rover2   = scenario.rover2;
 
   this.checkErrorsAndMoveRovers();
 
@@ -45,36 +43,20 @@ checkTest(scenario){
   } else{
     if(this.state.rover1.final.coordEW == this.state.rover1.expected.coordEW &&
         this.state.rover1.final.coordNS == this.state.rover1.expected.coordNS &&
-        this.state.rover1.final.orientation == this.state.rover1.expected.orientation) {
+        this.state.rover1.final.orientation == this.state.rover1.expected.orientation &&
+        this.state.rover2.final.coordEW == this.state.rover2.expected.coordEW &&
+        this.state.rover2.final.coordNS == this.state.rover2.expected.coordNS &&
+        this.state.rover2.final.orientation == this.state.rover2.expected.orientation) {
           console.log('TEST OK!!')
         } else{
           console.log('TEST FAILED')
         }
   }
       Utils.logResults(this.state, true);
-      alert('Test finished, check console for results')
 }
 
-///////////////////
+//////////BUSSINESS LOGIC/////////
 doMove (rover) {
-
-  function changeOrientation(orientationToMatch , newOrientation){
-      if(rover.final.orientation.toUpperCase() === orientationToMatch.toUpperCase()) {
-          rover.final.orientation = newOrientation;
-          return true;
-        }
-        return false;
-  }
-
-  function move(orientation , coord, amount){
-      if(rover.final.orientation.toUpperCase() === orientation.toUpperCase()) {
-          rover.final[coord] = rover.final[coord] + amount;
-          return true;
-        }
-        return false;
-  }
-
-
   rover.final.coordNS = rover.deploy.coordNS
   rover.final.coordEW = rover.deploy.coordEW
   rover.final.orientation = rover.orientation
@@ -84,22 +66,22 @@ doMove (rover) {
   {
     var oneMove = rover.move.charAt(x);
     if(oneMove === 'L' || oneMove === 'l'){
-      if(changeOrientation('N' , 'W'));
-      else if(changeOrientation('W' , 'S'));
-      else if(changeOrientation('S' , 'E'));
-      else if(changeOrientation('E' , 'N'));
+      if(Utils.changeOrientation(rover, 'N' , 'W'));
+      else if(Utils.changeOrientation(rover, 'W' , 'S'));
+      else if(Utils.changeOrientation(rover, 'S' , 'E'));
+      else if(Utils.changeOrientation(rover, 'E' , 'N'));
     }
     if(oneMove === 'R' || oneMove === 'r'){
-      if(changeOrientation('N' , 'E'));
-      else if(changeOrientation('E' , 'S'));
-      else if(changeOrientation('S' , 'W'));
-      else if(changeOrientation('W' , 'N'));
+      if(Utils.changeOrientation(rover, 'N' , 'E'));
+      else if(Utils.changeOrientation(rover, 'E' , 'S'));
+      else if(Utils.changeOrientation(rover, 'S' , 'W'));
+      else if(Utils.changeOrientation(rover, 'W' , 'N'));
     }
     if(oneMove === 'M' || oneMove === 'm'){
-      if(move('N','coordNS',+1));
-      else if(move('S','coordNS',-1));
-      else if(move('E','coordEW',+1));
-      else if(move('W','coordEW',-1));
+      if(Utils.move(rover, 'N','coordNS',+1));
+      else if(Utils.move(rover, 'S','coordNS',-1));
+      else if(Utils.move(rover, 'E','coordEW',+1));
+      else if(Utils.move(rover, 'W','coordEW',-1));
     }
     //console.log('MOVE --> ', oneMove, '!')
     //console.log(rover.final.coordEW,' E ' , rover.final.coordNS,' N ',rover.final.orientation)
@@ -107,6 +89,7 @@ doMove (rover) {
 }
 checkErrorsAndMoveRovers(){
     var errorList = [];
+
     var setErrors = (errorList) => {
       if (errorList.length>0){
         this.setState({ errorList:errorList})
@@ -115,7 +98,6 @@ checkErrorsAndMoveRovers(){
         return false;
       }
     }
-
 
     Utils.checkEmptyValues(this.state, errorList);
 
@@ -163,20 +145,16 @@ getRover(newRover, whatRover){
 }
 
 getScenarioFromTextInput(JSONtestScenarios) {
+  var previousState = {};
 
-  var previousPlateau = this.state.plateau;
-  var previousRover1  = this.state.rover1;
-  var previousRover2  = this.state.rover2;
-  var previousErrorList  = this.state.errorList;
+  Utils.copyStateValues(this.state , previousState);
 
   for (var scenario of JSONtestScenarios) {
     this.checkTest(scenario);
   }
 
-  this.state.errorList =  previousErrorList;
-  this.state.plateau = previousPlateau;
-  this.state.rover1 = previousRover1;
-  this.state.rover2 = previousRover2;
+  Utils.copyStateValues(previousState , this.state);
+  alert('Test finished, check console for results');
 }
 
 handleSubmitEvent(event) {
@@ -223,13 +201,3 @@ render(){
   }
 
 }
-/**
-  <br/>
-  Plateau {this.state.plateau.axisNS} X {this.state.plateau.axisEW}
-  <br/>
-    Rover1: {JSON.stringify(this.state.rover1)}
-  <br/>
-    Rover2: {JSON.stringify(this.state.rover2)}
-  <br/>
-    Errors: {JSON.stringify(this.state.errorList)}
-**/

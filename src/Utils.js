@@ -90,3 +90,28 @@ export function checkEmptyValues(state, errorList){
   checkEmptyValue(state.rover2.move, 'Rover2 "Move"',errorList);
   checkEmptyValue(state.rover2.orientation, 'Rover2 "Orientation"',errorList);
 }
+
+
+export function changeOrientation(rover, orientationToMatch , newOrientation){
+    if(rover.final.orientation.toUpperCase() === orientationToMatch.toUpperCase()) {
+        rover.final.orientation = newOrientation;
+        return true;
+      }
+      return false;
+}
+
+export function move(rover, orientation , coord, amount){
+    if(rover.final.orientation.toUpperCase() === orientation.toUpperCase()) {
+        rover.final[coord] = rover.final[coord] + amount;
+        return true;
+      }
+      return false;
+}
+
+export function copyStateValues(stateCopyFrom, stateCopyTo) {
+  stateCopyTo.plateau = stateCopyFrom.plateau;
+  stateCopyTo.rover1 = stateCopyFrom.rover1;
+  stateCopyTo.rover2  = stateCopyFrom.rover2;
+  stateCopyTo.errorList  = stateCopyFrom.errorList;
+  return stateCopyTo;
+}
